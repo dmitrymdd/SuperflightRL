@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- Игра крутится на старом Mono (CLR 2.0), поэтому net35 -->
+    <TargetFramework>net35</TargetFramework>
+    <AssemblyName>Superflight.AI</AssemblyName>
+    <RootNamespace>SuperflightRL</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <DebugType>none</DebugType>
+
+    <!-- ИЗМЕНИ ЭТОТ ПУТЬ на папку, где лежит Superflight.exe -->
+    <GameDir Condition="'$(GameDir)' == ''">D:\steam\steamapps\common\SuperFlight</GameDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Подтягивает системные библиотеки .NET 3.5 без установки самого 3.5 -->
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="BepInEx">
+      <HintPath>$(GameDir)\BepInEx\core\BepInEx.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>$(GameDir)\BepInEx\core\0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <!-- Все модули UnityEngine прямо из папки игры (*_Data\Managed) -->
+    <UnityDlls Include="$(GameDir)\*_Data\Managed\UnityEngine*.dll" />
+    <Reference Include="@(UnityDlls)" Private="false" />
+  </ItemGroup>
+
+  <!-- После сборки сразу кладём плагин в BepInEx\plugins (игра при этом должна быть закрыта) -->
+  <Target Name="CopyToPlugins" AfterTargets="Build">
+    <Copy SourceFiles="$(TargetPath)"
+          DestinationFolder="$(GameDir)\BepInEx\plugins"
+          ContinueOnError="true" />
+  </Target>
+
+</Project>

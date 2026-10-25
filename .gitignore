@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# .NET build output
+bin/
+obj/
+
+# IDE
+.idea/
+.vs/
+.vscode/
+*.user
+
+# Training runs (checkpoints, logs) — large, kept locally
+runs/
+
+# Game files must never be committed (copyrighted)
+Assembly-CSharp*.dll
+UnityEngine*.dll
+
+# Local AI assistant notes
+CLAUDE.md
